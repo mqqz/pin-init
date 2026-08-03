@@ -17,7 +17,7 @@ help: the following other types implement trait `Init<T, E>`
    | |     F: FnOnce(&mut T) -> Result<(), E>,
    | |_______________________________________^ `ChainInit<I, F, T, E>`
 ...
-   |   unsafe impl<T, E> Init<T, E> for Result<T, E> {
+   |   unsafe impl<T, E> Init<T, E> for Result<T, E> {}
    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `Result<T, E>`
 note: required by a bound in `pin_init::__internal::Slot::<pin_init::__internal::Unpinned, T>::init`
   --> src/__internal.rs

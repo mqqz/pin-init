@@ -12,7 +12,7 @@ pub fn init() -> impl PinInit<Test, Error> {
 }
 
 fn init_fn_ptr<T, E, I: PinInit<T, E>>(_: &I) -> *mut () {
-    I::__pinned_init as *mut ()
+    I::__init as *mut ()
 }
 
 fn read_symbols() -> Result<Vec<String>> {
@@ -57,5 +57,5 @@ fn type_name() {
     let symbol = &symbols[0];
     println!("{}: {}", symbol.len(), symbol);
 
-    assert!(symbol.len() < 181);
+    assert!(symbol.len() < 174);
 }
