@@ -62,6 +62,7 @@ const _: () = {
     where
         T: Bar<'a, 1>,
     {
+        #[inline]
         fn clone(&self) -> Self {
             *self
         }
@@ -153,6 +154,7 @@ const _: () = {
         T: Bar<'a, 1>,
     {
         type PinData = __ThePinData<'a, 'b, T, SIZE>;
+        #[inline]
         unsafe fn __pin_data() -> Self::PinData {
             __ThePinData {
                 __phantom: ::pin_init::__internal::PhantomInvariant::new(),

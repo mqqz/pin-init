@@ -38,6 +38,7 @@ const _: () = {
         __phantom: ::pin_init::__internal::PhantomInvariant<Foo>,
     }
     impl ::core::clone::Clone for __ThePinData {
+        #[inline]
         fn clone(&self) -> Self {
             *self
         }
@@ -92,6 +93,7 @@ const _: () = {
     }
     unsafe impl ::pin_init::__internal::HasPinData for Foo {
         type PinData = __ThePinData;
+        #[inline]
         unsafe fn __pin_data() -> Self::PinData {
             __ThePinData {
                 __phantom: ::pin_init::__internal::PhantomInvariant::new(),
