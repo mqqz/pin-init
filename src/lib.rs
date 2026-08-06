@@ -918,7 +918,7 @@ pub unsafe trait PinInit<T: ?Sized, E = Infallible>: Sized {
     /// Same as `__init`.
     #[inline(always)]
     #[cfg(not(kernel))]
-    #[deprecated = "use `ptr_try_init` instead"]
+    #[deprecated = "use `raw_try_init` instead"]
     unsafe fn __pinned_init(self, slot: *mut T) -> Result<(), E> {
         // SAFETY: Per safety requirement.
         unsafe { self.__init(slot) }
@@ -926,7 +926,7 @@ pub unsafe trait PinInit<T: ?Sized, E = Infallible>: Sized {
 
     /// Initializes `slot`.
     ///
-    /// It is not recommended to call this directly. Use [`ptr_init`] or [`ptr_try_init`].
+    /// It is not recommended to call this directly. Use [`raw_init`] or [`raw_try_init`].
     ///
     /// # Safety
     ///
@@ -972,7 +972,7 @@ pub unsafe trait PinInit<T: ?Sized, E = Infallible>: Sized {
 /// - `slot` will not move until it is dropped, i.e. it will be pinned.
 ///   If `init` implements `Init<T, E>`, this requirement is cancelled and it may be moved.
 #[inline(always)]
-pub unsafe fn ptr_init<T>(slot: *mut T, init: impl PinInit<T>) {
+pub unsafe fn raw_init<T>(slot: *mut T, init: impl PinInit<T>) {
     // SAFETY: Per safety requirement.
     unsafe { init.__init(slot).unwrap_or_else(|e| match e {}) }
 }
@@ -987,7 +987,7 @@ pub unsafe fn ptr_init<T>(slot: *mut T, init: impl PinInit<T>) {
 /// - `slot` will not move until it is dropped, i.e. it will be pinned.
 ///   If `init` implements `Init<T, E>`, this requirement is cancelled and it may be moved.
 #[inline(always)]
-pub unsafe fn ptr_try_init<T, E>(slot: *mut T, init: impl PinInit<T, E>) -> Result<(), E> {
+pub unsafe fn raw_try_init<T, E>(slot: *mut T, init: impl PinInit<T, E>) -> Result<(), E> {
     // SAFETY: Per safety requirement.
     unsafe { init.__init(slot) }
 }
