@@ -490,12 +490,14 @@ macro_rules! stack_pin_init {
     (let $var:ident $(: $t:ty)? = $val:expr) => {
         let val = $val;
         let mut $var = ::core::pin::pin!($crate::__internal::StackInit$(::<$t>)?::uninit());
-        let mut $var = match $crate::__internal::StackInit::init($var, val) {
+        // The `Infallible` error type is what requires the initializer to be infallible. It has
+        // to be annotated here rather than in the `Err` arm below, because binding a value of an
+        // uninhabited type makes everything following it unreachable.
+        let res: ::core::result::Result<_, ::core::convert::Infallible> =
+            $crate::__internal::StackInit::init($var, val);
+        let mut $var = match res {
             Ok(res) => res,
-            Err(x) => {
-                let x: ::core::convert::Infallible = x;
-                match x {}
-            }
+            Err(x) => match x {},
         };
     };
 }
