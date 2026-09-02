@@ -41,6 +41,15 @@ impl TupleStruct {
             1: 20,
         })
     }
+
+    pub fn new_from_constructor() -> impl PinInit<Self> {
+        pin_init!(Self(
+            #[cfg(any())]
+            Field,
+            10,
+            20,
+        ))
+    }
 }
 
 #[test]

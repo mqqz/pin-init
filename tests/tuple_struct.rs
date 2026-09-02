@@ -40,6 +40,38 @@ fn init_without_pinning() {
     assert_eq!(triple.as_ref().get_ref().2, 43);
 }
 
+#[test]
+fn tuple_struct_constructor_syntax() {
+    stack_pin_init!(let pinned = pin_init!(Triple(11, 29, 31)));
+    stack_pin_init!(let unpinned = init!(Triple(11, 29, 31)));
+
+    for triple in [pinned.as_ref().get_ref(), unpinned.as_ref().get_ref()] {
+        assert_eq!(triple.0, 11);
+        assert_eq!(triple.1, 29);
+        assert_eq!(triple.2, 31);
+    }
+}
+
+#[pin_data]
+struct ValueTuple<T>(T, i32);
+
+#[test]
+fn tuple_struct_constructor_infers_generics() {
+    stack_pin_init!(let tuple = pin_init!(ValueTuple(9u32, 6)));
+
+    assert_eq!(tuple.as_ref().get_ref().0, 9u32);
+    assert_eq!(tuple.as_ref().get_ref().1, 6);
+}
+
+#[test]
+#[allow(clippy::just_underscores_and_digits)]
+fn tuple_struct_constructor_does_not_shadow_numeric_identifiers() {
+    let _0 = 6;
+    stack_pin_init!(let tuple = pin_init!(ValueTuple(9u32, _0)));
+
+    assert_eq!(tuple.as_ref().get_ref().1, 6);
+}
+
 #[pin_data]
 struct DualPinned<T>(#[pin] CMutex<T>, #[pin] CMutex<T>, usize);
 

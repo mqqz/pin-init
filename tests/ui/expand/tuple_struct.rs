@@ -11,4 +11,7 @@ fn main() {
         1: PhantomPinned,
         2 <- 10,
     });
+
+    let mut second = [4u8, 5, 6];
+    let _ = init!(Foo(&mut second, PhantomPinned, 20));
 }
